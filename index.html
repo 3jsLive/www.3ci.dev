@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>3ci.dev</title>
+	<link href="common.css" rel="stylesheet">
+
+</head>
+
+<body>
+	<div class="container">
+
+		<h1 class="display-4 mb-5">Unofficial automated services for <a href="https://threejs.org/">three.js</a><br />
+			<p class="lead text-muted">("automated", all work-in-progress)</p>
+		</h1>
+
+		<p>The story so far: A watcher service polls the <b>GitHub API</b> looking for commits to the repository or open pull
+			requests.
+			Should a push event be detected, it gets split into its individual commits (if necessary) and re-pushed
+			to a fork. This triggers a build pipeline on Microsoft's <b>Azure cloud</b>, resulting in two builds - one
+			unmodified and one with source maps inlined.<br />
+			While the unmodified one is used for regular <i>syntax/code checks</i> and <i>linters</i>, the
+			<i>type search</i> and <i>dependency management</i> modules need the additional location data supplied by
+			source maps.<br />
+			The <i>dependency tree</i> gained from running the examples in a headless browser, crossed with a commit's
+			diff, and more (simpler) heuristics ought to reduce run times while also minimizing storage space (very WIP).<br />
+			Tests and checks are executed mostly in parallel, thanks to Azure's free 10 hosted workers.
+			Given GitHub's recent public opening of <b>GitHub Actions</b>, with its even more generous 20 free workers,
+			there might be a rewrite waiting for us in the future.<br />
+			<b>Stack:</b> <b>JavaScript</b> with small bits of <b>Bash</b>, databases all <b>SQLite</b>,
+			and workers by the aforementioned <b>Azure</b> and 3rd party servers. Formerly a (IMO glorious) mess
+			of microservices, now much less so and soon to be replaced with Docker. <b>VueJS</b> for the frontend.
+		</p>
+
+		<div class="card mb-3">
+			<div class="card-body">
+				<h4 class="card-title">live.3ci.dev</h4>
+				<h6 class="card-subtitle mb-2">Live testing (beta-ish)</h6>
+				<p class="card-text">
+					The official <a href="https://threejs.org/examples/"><code>three.js</code> examples</a> don't
+					reference the actual individual
+					source files in the core library, but rather include the transpiled & bundled version that - for now
+					- still needs manual updating and committing. <i>live</i> rebuilds the library artifacts for
+					every commit (<code>dev</code> branch & PRs) for easier testing.<br />
+					Todo: Efficient paging, it's getting <i>slightly</i> out of hand
+				</p>
+				<a class="card-link" href="https://live.3ci.dev">live.3ci.dev</a>
+			</div>
+		</div>
+		<div class="card mb-3">
+			<div class="card-body">
+				<h4 class="card-title">ci.3ci.dev</h4>
+				<h6 class="card-subtitle mb-2">CI with custom tests (alpha)</h6>
+				<p class="card-text">
+					Currently runs various checks, linters, a frankly excessive <i>type search</i> and file-level
+					dependency management. Lots of flaky tests that are highly tuned to the file- and code structure
+					of the library. Fun.<br />
+					Next: Increase dependencies tracking to function-level, then reduce runtime by only retesting
+					modified functions.<br />And cleanup the frontend code, it could use a proper brushing.<br />
+					Soon: Visual regression tests with Chrome's frame-precision render control,
+					automated profiling(alpha) and automated performance alerts<br />
+					Future: Given time and money, a fixed set of bare metal servers for more consistent measurements, maybe?
+				</p>
+				<a class="card-link" href="https://ci.3ci.dev">ci.3ci.dev</a>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title">stats.3ci.dev</h4>
+				<h6 class="card-subtitle mb-2">Stats and plots (planning stage)</h6>
+				<p class="card-text">
+					Gotta make use of those 500+ MB of logs we're collecting per commit.
+				</p>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>
